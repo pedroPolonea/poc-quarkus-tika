@@ -1,5 +1,8 @@
-package org.acme;
+package org.acme.resource;
 
+import io.netty.handler.codec.http2.Http2Error;
+import org.acme.service.ClientService;
+import org.acme.service.XlsxService;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
@@ -14,9 +17,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
+import java.net.URI;
+import java.util.Objects;
 
 @Path("/client")
-
 public class ClientResource {
     private Logger log = LoggerFactory.getLogger(ClientResource.class);
 
@@ -38,9 +42,21 @@ public class ClientResource {
     @POST
     @Path("/file")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response fileUp(@MultipartForm MultipartFormDataInput file){
         log.info("M=fileUp");
-        clientService.up(file);
+        final ByteArrayInputStream up = clientService.up(file);
+        log.info("M=fileUp, up={}", up);
+
+        if (Objects.nonNull(up)) {
+            log.error("M=fileUp, E=Vixxi");
+
+            return Response.ok(up)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, HEADER_VALUE)
+                    .location(URI.create("https://www.google.com.br/"))
+                    .build();
+
+        }
 
 
         return Response.ok().build();
