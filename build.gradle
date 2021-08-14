@@ -11,9 +11,11 @@ repositories {
 dependencies {
     implementation 'io.quarkus:quarkus-resteasy-multipart'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    // implementation 'io.quarkus:quarkus-tika'
+    //implementation 'io.quarkus:quarkus-tika'
     implementation 'io.quarkus:quarkus-jackson'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
+
+    //implementation 'com.sun.jersey.contribs:jersey-multipart'
 
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-resteasy'
